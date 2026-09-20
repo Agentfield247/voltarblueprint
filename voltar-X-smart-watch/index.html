@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voltar X — Full Watch Prototype</title>
+  <style>
+    :root {
+      --bg: #09090b;
+      --panel: #141416;
+      --line: #2a2a2e;
+      --text: #f5f5f7;
+      --muted: #8e8e93;
+      --blue: #0a84ff;
+      --green: #30d158;
+      --red: #ff453a;
+      --orange: #ff9f0a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      min-height: 100vh;
+    }
+    header {
+      padding: 22px 28px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    header h1 { font-size: 20px; font-weight: 650; letter-spacing: -0.3px; }
+    header p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .tabs { display: flex; gap: 8px; margin-top: 14px; }
+    .tabs button {
+      background: #1c1c1e; color: #fff; border: 1px solid #2c2c2e;
+      border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer;
+    }
+    .tabs button.active { background: #fff; color: #000; }
+    .view { display: none; }
+    .view.on { display: block; }
+    .prints { padding: 24px 28px 60px; max-width: 1100px; }
+    .prints h2 { font-size: 16px; margin: 0 0 8px; }
+    .prints .lead { color: #c7c7cc; font-size: 14px; line-height: 1.5; margin-bottom: 18px; }
+    .sheet {
+      margin: 0 0 28px;
+      background: #0d1a33;
+      border: 1px solid #1e3a5f;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .sheet img { width: 100%; display: block; }
+    .sheet figcaption {
+      padding: 12px 16px 14px;
+      font-size: 13px;
+      color: #c7c7cc;
+      line-height: 1.45;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 5fr;
+      gap: 0;
+      min-height: calc(100vh -4px);
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    /* LEFT: watch */
+    .stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 16px 28px;
+      border-right: 1px solid var(--line);
+      background: radial-gradient(ellipse at 50% 30%, #1a1a1e, #09090b 70%);
+    }
+    .watch-wrap { position: relative; width: 260px; height: 360px; }
+    .strap {
+      position: absolute; left: 50%; width: 88px; height: 78px;
+      background: linear-gradient(#2c2c2e, #161618);
+      transform: translateX(-50%); z-index: 0;
+    }
+    .strap.top { top: 4px; border-radius: 12px 12px 0 0; }
+    .strap.bottom { bottom: 4px; border-radius: 0 0 12px 12px; }
+    .case {
+      position: absolute; left: 32px; top: 46px;
+      width: 210px; height: 256px;
+      background: linear-gradient(160deg, #f3f3f5, #c8c8d0 60%, #aeaeb6);
+      border-radius: 58px;
+      box-shadow: 0 28px 50px rgba(0,0,0,.5), inset 0 1px 1px #fff;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+    }
+    .btn {
+      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+      width: 11px; height: 92px;
+      background: linear-gradient(#f4f4f6, #8e8e96);
+      border: 0; border-radius: 7px 3px 3px 7px;
+      box-shadow: -2px 0 8px rgba(0,0,0,.3);
+      cursor: pointer; z-index: 3;
+    }
+    .btn:active { filter: brightness(.85); }
+    .glass {
+      width: 190px; height: 236px; background: #000;
+      border-radius: 48px; overflow: hidden; position: relative;
+    }
+    .screen { position: absolute; inset: 0; padding: 18px 16px 14px; display: none; flex-direction: column; }
+    .screen.on { display: flex; }
+    .bar { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); font-weight: 600; }
+    .time { font-size: 40px; font-weight: 650; letter-spacing: -1.4px; line-height: 1; margin-top: 8px; }
+    .sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .cards { margin-top: auto; display: flex; flex-direction: column; gap: 7px; }
+    .card {
+      background: #1c1c1e; border-radius: 16px; padding: 9px 11px;
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .card em { font-style: normal; font-size: 10px; color: var(--muted); }
+    .card b { font-size: 16px; }
+    .blue { color: var(--blue); }
+    .red { color: var(--red); }
+    .green { color: var(--green); }
+    .orange { color: var(--orange); }
+    .label { font-size: 11px; color: var(--muted); font-weight: 650; letter-spacing: .06em; text-transform: uppercase; margin-top: 16px; }
+    .num { font-size: 36px; font-weight: 650; letter-spacing: -1px; margin-top: 4px; }
+    .unit { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .ok { color: var(--green); font-size: 12px; margin-top: 8px; font-weight: 600; }
+    .warn { color: var(--orange); font-size: 12px; margin-top: 8px; font-weight: 600; }
+    .dots { display: flex; gap: 5px; justify-content: center; margin-top: auto; }
+    .dots i { width: 5px; height: 5px; border-radius: 50%; background: #3a3a3c; }
+    .dots i.on { background: #fff; }
+    .pill {
+      margin-top: 14px; background: #1c1c1e; border-radius: 14px; padding: 10px;
+      font-size: 12px; line-height: 1.35;
+    }
+    .take {
+      margin-top: 10px; background: var(--blue); color: #fff; border: 0;
+      border-radius: 14px; padding: 9px; font-weight: 650; cursor: pointer; width: 100%;
+    }
+    .wave { height: 36px; margin-top: 12px; display: flex; align-items: flex-end; gap: 3px; }
+    .wave span { width: 6px; background: var(--red); border-radius: 3px; animation: beat 1s ease-in-out infinite; }
+    .wave span:nth-child(2) { animation-delay: .1s; }
+    .wave span:nth-child(3) { animation-delay: .2s; }
+    .wave span:nth-child(4) { animation-delay: .15s; }
+    @keyframes beat { 0%,100% { height: 10px; } 50% { height: 34px; } }
+    .inflate .air {
+      position: absolute; inset: 18px; border: 2px dashed var(--blue);
+      border-radius: 40px; opacity: .55; animation: pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse { 50% { transform: scale(1.04); opacity: 1; } }
+    .nav {
+      display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+      margin-top: 18px; max-width: 280px;
+    }
+    .nav button {
+      background: #1c1c1e; color: #fff; border: 1px solid #2c2c2e;
+      border-radius: 999px; padding: 6px 10px; font-size: 11px; cursor: pointer;
+    }
+    .nav button.active { background: #fff; color: #000; }
+
+    /* RIGHT: explanations */
+    .docs { padding: 28px 32px 48px; overflow: auto; }
+    .docs h2 { font-size: 15px; margin: 22px 0 8px; }
+    .docs h2:first-child { margin-top: 0; }
+    .docs p, .docs li { color: #c7c7cc; font-size: 14px; line-height: 1.55; }
+    .docs ul { padding-left: 18px; }
+    .docs li { margin: 5px 0; }
+    .tag {
+      display: inline-block; font-size: 11px; font-weight: 650;
+      background: #1c1c1e; color: var(--blue); border-radius: 6px;
+      padding: 2px 7px; margin-right: 6px;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; }
+    code { font-size: 12px; background: #1c1c1e; padding: 1px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Voltar X — watch prototype</h1>
+    <p>One long left button. Soft case. Cuff strap inflates for blood pressure. Tap a face below or press the side button.</p>
+    <div class="tabs">
+      <button class="active" data-view="demo">Watch demo</button>
+      <button data-view="prints">Blueprints</button>
+    </div>
+  </header>
+
+  <div class="view on" id="demo">
+  <div class="layout">
+    <div class="stage">
+      <div class="watch-wrap">
+        <div class="strap top"></div>
+        <div class="strap bottom"></div>
+        <button class="btn" id="side" title="Long side button"></button>
+        <div class="case">
+          <div class="glass" id="glass">
+
+            <div class="screen on" data-id="home">
+              <div class="bar"><span>Voltar</span><span>84%</span></div>
+              <div class="time" id="clock">9:41</div>
+              <div class="sub">Sun 20 Sep</div>
+              <div class="cards">
+                <div class="card"><em>Blood pressure</em><b class="blue">118/76</b></div>
+                <div class="card"><em>Heart rate</em><b class="red">64</b></div>
+              </div>
+            </div>
+
+            <div class="screen" data-id="bp">
+              <div class="bar"><span>BP</span><span>Today</span></div>
+              <div class="label">Blood pressure</div>
+              <div class="num">118<span class="unit"> / 76</span></div>
+              <div class="ok">Normal · 7:12 AM</div>
+              <div class="sub" style="margin-top:10px">Next auto reading 7:00 AM</div>
+              <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+
+            <div class="screen inflate" data-id="inflate">
+              <div class="air"></div>
+              <div class="bar"><span>Measuring</span><span>Hold still</span></div>
+              <div class="label">Inflating cuff</div>
+              <div class="num">…</div>
+              <div class="warn">Strap tightening · 20 sec</div>
+              <div class="sub" style="margin-top:12px">Wrist at heart level</div>
+            </div>
+
+            <div class="screen" data-id="hr">
+              <div class="bar"><span>Heart</span><span>Now</span></div>
+              <div class="label">Heart rate</div>
+              <div class="num">64<span class="unit"> bpm</span></div>
+              <div class="wave"><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="ok">Resting</div>
+            </div>
+
+            <div class="screen" data-id="ecg">
+              <div class="bar"><span>ECG</span><span>30s</span></div>
+              <div class="label">Electrocardiogram</div>
+              <div class="num" style="font-size:22px;margin-top:14px">Finger on glass</div>
+              <div class="sub">Records rhythm for AFib check. Doctor sees the strip.</div>
+              <div class="ok">Ready</div>
+            </div>
+
+            <div class="screen" data-id="move">
+              <div class="bar"><span>Move</span><span>Goal 8k</span></div>
+              <div class="label">Steps today</div>
+              <div class="num">6,240</div>
+              <div class="sub">3.9 km · 218 kcal</div>
+              <div class="ok">Sleep 7h 12m</div>
+            </div>
+
+            <div class="screen" data-id="sleep">
+              <div class="bar"><span>Sleep</span><span>Last night</span></div>
+              <div class="label">Asleep</div>
+              <div class="num" style="font-size:26px">11:18 – 6:30</div>
+              <div class="sub">7h 12m · overnight HR 58</div>
+              <div class="ok">Wrist temp stable</div>
+            </div>
+
+            <div class="screen" data-id="meds">
+              <div class="bar"><span>Meds</span><span>8:00 AM</span></div>
+              <div class="label">Take now</div>
+              <div class="pill"><b>Lisinopril 10 mg</b><br>1 tablet · with water</div>
+              <button class="take" id="taken">Mark taken</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="nav" id="nav"></div>
+    </div>
+
+    <div class="docs">
+      <h2>What this prototype is</h2>
+      <p>Interactive mock of the <b>Voltar X</b> watch. Hardware idea: Huawei Watch D–style <b>mini pump + inflatable strap</b>, iOS-simple face, <b>one long button on the left</b>, almost no edges. It is not a medical device — it shows how the product should feel.</p>
+
+      <h2>Hardware you are looking at</h2>
+      <ul>
+        <li><span class="tag">Case</span> Soft squircle. Slightly thicker than a normal watch so a coin-size pump can sit inside.</li>
+        <li><span class="tag">Button</span> Only control. Short press = next face. Long press (in a real unit) = start BP or confirm a pill.</li>
+        <li><span class="tag">Strap</span> Looks like a normal band. Inside is an airbag. That is the cuff. The glass does not inflate.</li>
+        <li><span class="tag">Back</span> Optical sensor for heart rate, HRV, SpO2, skin temperature.</li>
+      </ul>
+
+      <h2>How blood pressure works here</h2>
+      <p>Once a day (or when the user / doctor asks): watch reminds → user stays still, wrist at heart level → pump fills the strap → sensor reads pulse waves while it deflates → systolic / diastolic saved to the Voltar account → assigned doctor can see it.</p>
+
+      <h2>Faces</h2>
+      <table>
+        <thead><tr><th>Face</th><th>What it shows</th><th>Why it exists</th></tr></thead>
+        <tbody>
+          <tr><td>Home</td><td>Time, last BP, last HR</td><td>Glance. No extra buttons.</td></tr>
+          <tr><td>Blood pressure</td><td>118/76, status, next auto reading</td><td>Main medical number.</td></tr>
+          <tr><td>Inflating</td><td>Hold still, cuff tightening</td><td>The actual measurement moment.</td></tr>
+          <tr><td>Heart rate</td><td>Live bpm</td><td>Everyday heart check.</td></tr>
+          <tr><td>ECG</td><td>30-second rhythm strip</td><td>AFib / irregular beat for the doctor.</td></tr>
+          <tr><td>Steps</td><td>Count, distance, calories</td><td>Activity for heart health.</td></tr>
+          <tr><td>Sleep</td><td>Fell asleep / woke up</td><td>Overnight recovery.</td></tr>
+          <tr><td>Meds</td><td>Drug name + Take now</td><td>Prescription alarm on the wrist.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Also on the watch (not a separate face yet)</h2>
+      <ul>
+        <li>HRV → stress estimate</li>
+        <li>Blood oxygen</li>
+        <li>Wrist skin temperature (trend, not a clinic thermometer)</li>
+        <li>High / low HR and BP alerts</li>
+        <li>Auto-sync to the subscriber’s Voltar account</li>
+      </ul>
+
+      <h2>What it will not do</h2>
+      <ul>
+        <li>Detect headaches</li>
+        <li>Diagnose or prescribe — the doctor in the app does that</li>
+        <li>Replace an upper-arm cuff when a clinical decision is needed</li>
+      </ul>
+
+      <h2>How to use this file</h2>
+      <p>Press the long silver button, tap the screen, or use the pills under the watch. <code>Mark taken</code> on the meds face logs a dose in this demo only.</p>
+    </div>
+  </div>
+  </div>
+
+  <div class="view" id="prints">
+    <div class="prints">
+      <h2>Engineering blueprints</h2>
+      <p class="lead">These sheets are the hardware prototype. A normal watch CAD cannot take blood pressure. Voltar X adds a pump in the case and an airbag in the strap. The glass does not inflate.</p>
+
+      <figure class="sheet">
+        <img src="assets/PA5eB.jpg" alt="Voltar X orthographic blueprint: front, left side, back" />
+        <figcaption><b>Sheet A — views.</b> Front, left side (one long button, no crown), back. Labels: OLED, strap airbag cuff, air channel, micro pump, pressure sensor, valve, safety relief, PPG sensor.</figcaption>
+      </figure>
+
+      <figure class="sheet">
+        <img src="assets/EDOG1.jpg" alt="Voltar X exploded inflation assembly blueprint" />
+        <figcaption><b>Sheet B — inflation assembly.</b> Exploded parts: glass, chassis, micro pump, valve + sensor, air hose into the lug, double-layer strap airbag, optical sensor, side button. Dashed line = air path. Pump → valve → hose → strap cuff.</figcaption>
+      </figure>
+
+      <figure class="sheet">
+        <img src="assets/LpMdE.jpg" alt="Voltar X strap cuff cross section blueprint" />
+        <figcaption><b>Sheet C — cuff cutaway.</b> Why it can read BP: the strap bladder presses the wrist over the radial artery. Pump sits in the case. Sensor reads pressure while the cuff deflates.</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll(".tabs button").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".view").forEach(v => v.classList.remove("on"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.view).classList.add("on");
+      };
+    });
+    const ids = ["home","bp","inflate","hr","ecg","move","sleep","meds"];
+    const names = ["Home","BP","Inflate","HR","ECG","Steps","Sleep","Meds"];
+    let i = 0;
+    const screens = Object.fromEntries([...document.querySelectorAll(".screen")].map(s => [s.dataset.id, s]));
+    const nav = document.getElementById("nav");
+    names.forEach((n, idx) => {
+      const b = document.createElement("button");
+      b.textContent = n;
+      b.onclick = () => show(idx);
+      nav.appendChild(b);
+    });
+    function show(n) {
+      screens[ids[i]].classList.remove("on");
+      i = n;
+      screens[ids[i]].classList.add("on");
+      [...nav.children].forEach((b, k) => b.classList.toggle("active", k === i));
+    }
+    show(0);
+    document.getElementById("side").onclick = () => show((i + 1) % ids.length);
+    document.getElementById("glass").addEventListener("click", e => {
+      if (e.target.id === "taken") return;
+      show((i + 1) % ids.length);
+    });
+    document.getElementById("taken").onclick = e => {
+      e.stopPropagation();
+      e.target.textContent = "Taken · 8:01 AM";
+      e.target.style.background = "#30d158";
+    };
+    const clock = document.getElementById("clock");
+    const tick = () => {
+      const d = new Date();
+      clock.textContent = d.getHours() + ":" + String(d.getMinutes()).padStart(2,"0");
+    };
+    tick(); setInterval(tick, 10000);
+  </script>
+</body>
+</html>

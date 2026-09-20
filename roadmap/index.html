@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voltar — Product, Rules, Flows & Cost Spec</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --card: #fff;
+      --ink: #1d1d1f;
+      --muted: #6e6e73;
+      --line: #d2d2d7;
+      --blue: #0071e3;
+      --green: #248a3d;
+      --red: #b91c1c;
+      --amber: #b45309;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    header {
+      background: #000;
+      color: #fff;
+      padding: 36px 28px 28px;
+    }
+    header p.kicker { color: #a1a1a6; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+    header h1 { font-size: 32px; letter-spacing: -0.6px; margin-top: 6px; }
+    header .sub { color: #d2d2d7; max-width: 720px; margin-top: 8px; font-size: 15px; }
+    nav {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 14px 28px; background: #fff; border-bottom: 1px solid var(--line);
+      position: sticky; top: 0; z-index: 5;
+    }
+    nav a {
+      font-size: 13px; color: var(--blue); text-decoration: none;
+      background: #f5f5f7; padding: 6px 10px; border-radius: 999px;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 28px 20px 80px; }
+    section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px 24px 26px;
+      margin-bottom: 16px;
+    }
+    h2 { font-size: 20px; letter-spacing: -0.3px; margin-bottom: 10px; }
+    h3 { font-size: 15px; margin: 16px 0 6px; }
+    p, li { font-size: 14.5px; color: #3d3d42; }
+    ul, ol { padding-left: 20px; }
+    li { margin: 5px 0; }
+    .fix {
+      background: #fff7ed; border: 1px solid #fdba74; color: #7c2d12;
+      padding: 10px 12px; border-radius: 10px; font-size: 13.5px; margin: 10px 0 14px;
+    }
+    .rule {
+      background: #f0f9ff; border-left: 3px solid var(--blue);
+      padding: 8px 12px; border-radius: 0 10px 10px 0; margin: 8px 0; font-size: 13.5px;
+    }
+    .no {
+      background: #fef2f2; border-left: 3px solid var(--red);
+      padding: 8px 12px; border-radius: 0 10px 10px 0; margin: 8px 0; font-size: 13.5px;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13.5px; }
+    th, td { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-size: 11px; text-transform: uppercase; color: var(--muted); }
+    .muted { color: var(--muted); font-size: 13px; }
+    code { background: #f5f5f7; padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="kicker">Voltar internal spec · corrected</p>
+    <h1>Product, team, rules, money, screens</h1>
+    <p class="sub">Heart-care app + Voltar X watch. Chat-first. AI is a companion, not a doctor. Doctors prescribe. Pharmacy sources drugs. Guests can pay as they go.</p>
+  </header>
+  <nav>
+    <a href="#team">Team</a>
+    <a href="#rules">Rules</a>
+    <a href="#ai">AI</a>
+    <a href="#money">Money</a>
+    <a href="#home">Home</a>
+    <a href="#shop">Shop</a>
+    <a href="#consult">Consult</a>
+    <a href="#watch">Watch</a>
+    <!-- <a href="#cost">Cost</a> -->
+  </nav>
+  <main>
+
+    <section>
+      <h2>Important!</h2>
+      <div class="fix">
+        AI never diagnoses “what’s wrong” and never prescribes. If the user needs that, route to a licensed clinician.<br />
+        Shop does not show stock counts. It checks <b>availability</b> with vendors.<br />
+        Users do not browse a doctor marketplace. Voltar <b>assigns</b> a clinician after intake.<br />
+        Recordings and prescription images are sensitive health data — consent + lock-down required.
+      </div>
+    </section>
+
+    <section id="team">
+      <h2>1. Team roles</h2>
+      <table>
+        <tr><th>Role</th><th>Owns</th><th>Does not own</th></tr>
+        <tr>
+          <td><b>Flow / systems designers</b></td>
+          <td>User flows, backend architecture diagrams, operations (consult → Rx → pharmacy → delivery), emergency paths, guest vs account states</td>
+          <td>Pixels or Flutter widgets</td>
+        </tr>
+        <tr>
+          <td><b>Frontend</b></td>
+          <td><b>Flutter only</b> — one codebase for iOS, Android, web, Windows, macOS, Linux. Retention UI: chat-first, few taps</td>
+          <td>Server, database, model prompts</td>
+        </tr>
+        <tr>
+          <td><b>Backend</b></td>
+          <td>APIs, auth (guest + full), sessions, payments, prescriptions, vendor availability, recordings storage, doctor matching, watch ingest</td>
+          <td>Flutter screens</td>
+        </tr>
+        <tr>
+          <td><b>AI / voice</b></td>
+          <td>Existing models (Grok, ChatGPT, etc.) + ElevenLabs for the welcome/check-in call. Guardrails.</td>
+          <td>Clinical decisions</td>
+        </tr>
+        <tr>
+          <td><b>Clinical / ops</b></td>
+          <td>Doctor onboarding, Rx review, pharmacy partners, HMO later</td>
+          <td>App chrome</td>
+        </tr>
+      </table>
+    </section>
+
+    <section id="rules">
+      <h2>2. Other rules we need</h2>
+      <h3>Product</h3>
+      <ul>
+        <li><b>Service before signup.</b> Open app → chat is already there. Account only when they pay for drugs, save history, or subscribe.</li>
+        <li><b>Guest is first-class.</b> “Quick Consultation” works anonymous until checkout / Rx fulfillment needs a name.</li>
+        <li><b>Chat is the OS.</b> Home is not a dashboard of 20 tiles. Chat + call + sign-in.</li>
+        <li><b>Voltar answers product questions too</b> (“how do I book video?”) and can route.</li>
+        <li>Watch versions are named <code>Voltar X Series N</code> (Series 1, Series 2…).</li>
+      </ul>
+      <h3>Clinical safety</h3>
+      <div class="no">AI must not: name a disease as the cause, suggest a drug, dose, or “you probably have X”.</div>
+      <div class="rule">AI may: ask how they feel, listen, summarize for a doctor, calm them, explain how Voltar works, and hand off to a human.</div>
+      <ul>
+        <li>Prescription-only medicines: blocked in shop until a Voltar doctor issues an Rx.</li>
+        <li>Emergency language (“chest pain”, “can’t breathe”, suicidal talk) → show emergency actions + optional auto-call path. Do not chat it away.</li>
+        <li>Doctors prescribe. Pharmacy sources. Voltar does not invent stock.</li>
+      </ul>
+      <h3>Legal / ops (must budget)</h3>
+      <ul>
+        <li>Telemedicine rules in each country we launch (Nigeria first: licensed clinicians, informed consent).</li>
+        <li>Pharmacy partnership / no illegal retail of controlled drugs.</li>
+        <li>Data protection (NDPR and similar). Health records encrypted. Need-to-know access.</li>
+        <li>Call/video/photo recording: explicit consent, retention limit, admin-only playback.</li>
+        <li>Age gate. Minors need a guardian flow later — do not launch that sloppy.</li>
+        <li>Insurance/HMO is phase 2. Do not claim “we issue insurance” until licensed.</li>
+        <li>Watch BP cuff is a medical-device path. App can ship without the watch.</li>
+      </ul>
+      <h3>Matching doctors</h3>
+      <ul>
+        <li>No doctor shopping grid on the consult page.</li>
+        <li>AI + rules pick one clinician from specialty, language, load, and reputation.</li>
+        <li>Reputation score is visible <b>after</b> that patient has finished a session with that doctor (or in history). Both sides leave a review.</li>
+        <li>Switching doctors is a support / reassign action, not a swipe deck.</li>
+      </ul>
+    </section>
+
+    <section id="ai">
+      <h2>3. AI layer (helper, not the product)</h2>
+      <p>Use existing models (Grok, ChatGPT, etc.). The model is a fast, kind layer. Humans do medicine.</p>
+      <h3>Allowed</h3>
+      <ul>
+        <li>Open with “How are you feeling today?”</li>
+        <li>Ask about their day, sleep, mood, watch readings if linked.</li>
+        <li>Collect symptoms into a structured intake the doctor can read.</li>
+        <li>Explain Voltar (plans, how consults work, how pharmacy works).</li>
+        <li>Recommend <b>that they see a specialist</b>, then create a session.</li>
+        <li>Trigger emergency UI / call if they sound in danger.</li>
+        <li>Voice check-in via ElevenLabs (automated). Same guardrails as text.</li>
+      </ul>
+      <h3>Forbidden</h3>
+      <ul>
+        <li>Prescribe or name doses.</li>
+        <li>Give a probable diagnosis or “this is likely X”.</li>
+        <li>Argue the user out of seeing a doctor when risk is high.</li>
+        <li>Unmonitored long-running advice. Logs reviewed. Jailbreaks blocked.</li>
+      </ul>
+      <p class="muted">Prompt stack: system policy → intake schema → handoff card for the doctor → never a treatment plan.</p>
+    </section>
+
+    <section id="money">
+      <h2>4. Money</h2>
+      <table>
+        <tr><th>Mode</th><th>Who</th><th>What they get</th></tr>
+        <tr><td><b>Guest / pay as you go</b></td><td>No account required</td><td>Chat with AI free. Quick Consult: pay the bill shown up front, get time with a doctor. Can order from an Rx after. After drug pay → prompt a 10-second signup (name, email, password or Google/Apple).</td></tr>
+        <tr><td><b>Pay per session</b></td><td>Account optional until save/history</td><td>One consult. Choose channel price.</td></tr>
+        <tr><td><b>Subscription</b></td><td>Signed-in</td><td>Voltar X watch on qualifying plans, assigned clinician monitoring, daily BP, med alarms, cheaper/included sessions per plan.</td></tr>
+      </table>
+      <h3>Consult channel prices (relative)</h3>
+      <ul>
+        <li>Chat — cheapest</li>
+        <li>Voice — more</li>
+        <li>Video — more</li>
+        <li>Physical visit — booked from the doctor’s free slots</li>
+        <li>Full pack — chat + voice + video (and physical if added)</li>
+      </ul>
+      <p>Users pick the mode before the session starts. Mid-session they can <b>migrate</b> (chat → video → chat) if they pay the difference. Time remaining carries when possible.</p>
+      <p class="muted">Why guest checkout exists: TikTok / YouTube pattern. Use first, account when they need memory, delivery, or a watch.</p>
+    </section>
+
+    <section id="home">
+      <h2>5. Home = chat</h2>
+      <ul>
+        <li>Full-screen thread. First line already waiting: “How are you feeling today?”</li>
+        <li>Call button = automated ElevenLabs check-in (not a random human on first tap).</li>
+        <li>Sign in sits in the corner. Not a wall before chat.</li>
+        <li>If watch is linked: tiny BP / HR chip in the header, tap to expand. Not a second home.</li>
+        <li>Ask Voltar anything about the app; it routes (“open pharmacy”, “start consult”).</li>
+      </ul>
+    </section>
+
+    <section id="shop">
+      <h2>6. Shop / pharmacy / cart</h2>
+      <ul>
+        <li>Search drugs. Each card: name, what it is used for, Rx required or not.</li>
+        <li><b>No “40 in stock”.</b> User selects → we <b>ask availability</b> (vendor / partner pharmacy) → reply yes/no + ETA + price.</li>
+        <li>They can ask availability without paying.</li>
+        <li>OTC can check out as guest. Rx-only: doctor session first, then cart becomes a “consult kit”.</li>
+        <li><b>Upload prescription:</b> AI reads the image, matches catalogue SKUs, then the same availability flow. If a line is missing, still ask vendors. A pharmacist/clinician must confirm before dispense when the law requires it.</li>
+        <li>Pay for drugs → prompt signup so delivery and history have a name.</li>
+        <li>If we cannot source it, user may pick up at a nearby partner pharmacy with the e-Rx.</li>
+      </ul>
+    </section>
+
+    <section id="consult">
+      <h2>7. Consult &amp; chat</h2>
+      <p>One thread. AI gathers what a doctor needs. System picks a clinician. Session starts. No profile mall.</p>
+      <h3>Session object</h3>
+      <ul>
+        <li><b>Duration</b> — paid timeframe</li>
+        <li><b>Migrations</b> — chat ↔ voice ↔ video (and later physical)</li>
+        <li><b>Media</b> — photos, voice, video. Private. Voltar admins + treating clinician only. Stored encrypted.</li>
+        <li><b>Prescriptions</b> — doctor writes Rx → user checks out as a kit → we source &amp; deliver or send to nearby pharmacy</li>
+        <li><b>Schedule</b> — upcoming / can book another day / can cancel</li>
+        <li><b>History</b> — past sessions, ratings (after the visit)</li>
+      </ul>
+      <h3>After the session</h3>
+      <ul>
+        <li>Patient rates doctor. Doctor rates encounter quality (no public attack thread).</li>
+        <li>Only then does that patient see that doctor’s reputation and other reviews.</li>
+      </ul>
+      <h3>Settings / records</h3>
+      <p>Meds, allergies, conditions, watch trends. Stored so the assigned doctor does not start from zero.</p>
+    </section>
+
+    <section id="watch">
+      <h2>8. Platforms &amp; Voltar X</h2>
+      <ul>
+        <li><b>Now:</b> Flutter app on phone. Laptop/desktop for video + chat + booking.</li>
+        <li><b>Watch:</b> Voltar X Series 1, Series 2… cuff strap BP, HR, ECG, steps, sleep, med alarms, daily BP push to the assigned clinician on subscription plans.</li>
+        <li>Hardware follows the existing watch prototype + blueprints. App can launch without Series 1 in hand.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>9. Core user flows (short)</h2>
+      <ol>
+        <li>Open app → AI chat (guest).</li>
+        <li>Feels unwell → intake → pay wall for human consult (shown up front) → assigned doctor.</li>
+        <li>Doctor Rx → availability check → pay → signup if still guest → deliver or pharmacy pickup.</li>
+        <li>Looks fine → shop OTC → availability → pay → signup prompt.</li>
+        <li>Subscriber → watch auto-syncs → daily BP → clinician sees flags, not a 24/7 raw dump.</li>
+        <li>Emergency phrase → emergency actions, stop casual chat.</li>
+      </ol>
+    </section>
+
+    <!-- <section id="cost">
+      <h2>10. Cost breakdown (planning ranges, USD)</h2>
+      <p class="muted">Not a quote. Lagos / remote mix will change the numbers. Watch hardware is a separate company-scale line.</p>
+      <table>
+        <tr><th>Line</th><th>What</th><th>Early (3–4 mo MVP)</th><th>Notes</th></tr>
+        <tr><td>Flow / systems design</td><td>1 product-systems person</td><td>$4k–$12k / mo</td><td>Flows + architecture boards</td></tr>
+        <tr><td>Flutter</td><td>2 engineers</td><td>$8k–$24k / mo</td><td>Phone + web/desktop from one repo</td></tr>
+        <tr><td>Backend</td><td>2 engineers</td><td>$8k–$24k / mo</td><td>Auth, pay, sessions, Rx, availability</td></tr>
+        <tr><td>AI / voice</td><td>APIs, not training a new model</td><td>$500–$4k / mo usage</td><td>Grok/OpenAI + ElevenLabs minutes</td></tr>
+        <tr><td>Design UI</td><td>1 product designer (part)</td><td>$3k–$8k / mo</td><td>Chat-first, iOS-simple</td></tr>
+        <tr><td>Cloud + DB + recordings</td><td>AWS/GCP + storage</td><td>$300–$2k / mo at start</td><td>Video will dominate later</td></tr>
+        <tr><td>Payments</td><td>Paystack / Stripe fees</td><td>~1.5–4% + VAT</td><td>Guest checkout must work</td></tr>
+        <tr><td>Legal / licenses</td><td>Counsel, telehealth, pharmacy contracts</td><td>$5k–$25k setup</td><td>Do this before ads</td></tr>
+        <tr><td>Clinical ops</td><td>Doctor payouts</td><td>60–80% of session fee</td><td>Voltar keeps the rest + shop margin</td></tr>
+        <tr><td>Pharmacy / last mile</td><td>Partner, not warehouse</td><td>Per order</td><td>Availability model, no stock brag</td></tr>
+        <tr><td>Voltar X Series 1</td><td>Pump, cuff strap, tooling</td><td>$150k–$1M+ to first units</td><td>After app revenue or a hardware raise</td></tr>
+      </table>
+      <p style="margin-top:12px"><b>Lean MVP cash (app only, no watch factory):</b> roughly <b>$40k–$120k</b> over a quarter if the team is small and senior-mixed, plus always-on API + legal. Watch is not in that number.</p>
+    </section> -->
+
+    <section>
+      <h2>10. Build order</h2>
+      <ol>
+        <li>Guest chat + guardrailed AI + emergency banner</li>
+        <li>Payments + Quick Consult assignment + chat session</li>
+        <li>Voice / video + recordings consent</li>
+        <li>Doctor Rx + availability shop + guest-to-account</li>
+        <li>History, ratings, records</li>
+        <li>Desktop Flutter</li>
+        <li>Watch Series 1 + HMO pilots</li>
+      </ol>
+    </section>
+
+  </main>
+</body>
+</html>

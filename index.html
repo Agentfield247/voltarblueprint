@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voltar — internal hub</title>
+  <style>
+    :root { --ink:#1d1d1f; --muted:#6e6e73; --line:#d2d2d7; --bg:#f5f5f7; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    }
+    header { padding: 56px 24px 12px; max-width: 720px; margin: 0 auto; }
+    header p.k { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    header h1 { font-size: 40px; letter-spacing: -1.2px; margin-top: 8px; }
+    header .sub { color: var(--muted); margin-top: 8px; font-size: 16px; max-width: 520px; }
+    main { max-width: 720px; margin: 0 auto; padding: 24px 24px 80px; display: grid; gap: 12px; }
+    a.card {
+      display: block; background: #fff; border: 1px solid var(--line);
+      border-radius: 18px; padding: 20px 22px; text-decoration: none; color: inherit;
+    }
+    a.card:hover { border-color: #0071e3; }
+    a.card span { font-size: 12px; color: #0071e3; font-weight: 650; letter-spacing: .04em; }
+    a.card h2 { font-size: 22px; letter-spacing: -.4px; margin: 4px 0 6px; }
+    a.card p { color: var(--muted); font-size: 14px; line-height: 1.45; }
+    a.card code { font-size: 12px; color: #86868b; }
+    footer { max-width: 720px; margin: 0 auto; padding: 0 24px 40px; color: #86868b; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="k">Voltar</p>
+    <h1>Internal hub</h1>
+    <p class="sub">Watch, product rules, and the money sheet. Start here.</p>
+  </header>
+  <main>
+    <a class="card" href="voltar-X-smart-watch/index.html">
+      <span>Hardware</span>
+      <h2>Watch blueprints</h2>
+      <p>Voltar X interactive faces, cuff inflation, med alarm, and the three engineering sheets.</p>
+      <code>/voltar-X-smart-watch/index.html</code>
+    </a>
+    <a class="card" href="roadmap/index.html#watch">
+      <span>Company</span>
+      <h2>Product, team, rules, money, screens</h2>
+      <p>Flutter vs PHP backend, AI guardrails, guest checkout, shop, consult, then the watch / Series line.</p>
+      <code>/roadmap/index.html#watch</code>
+    </a>
+    <a class="card" href="pricing/index.html">
+      <span>Cash</span>
+      <h2>Expenses</h2>
+      <p>2–4 month MVP budget. Naira people costs, USD tools, ElevenLabs, VPS, R2.</p>
+      <code>/pricing/index.html</code>
+    </a>
+  </main>
+  <footer>Voltar internal · Sept 2026</footer>
+</body>
+</html>
