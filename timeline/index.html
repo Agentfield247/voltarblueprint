@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voltar — Development timeline</title>
+  <style>
+    :root { --bg:#f5f5f7; --card:#fff; --ink:#1d1d1f; --muted:#6e6e73; --line:#d2d2d7; --blue:#0071e3; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background: var(--bg); color: var(--ink); }
+    header { background:#000; color:#fff; padding:32px 24px 24px; }
+    header a { color:#a1a1a6; font-size:12px; text-decoration:none; }
+    header h1 { font-size:28px; letter-spacing:-.5px; margin-top:8px; }
+    header p { color:#a1a1a6; margin-top:6px; max-width:640px; font-size:14px; }
+    main { max-width:880px; margin:0 auto; padding:22px 16px 72px; }
+    section { background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px 20px 20px; margin-bottom:12px; }
+    h2 { font-size:17px; margin-bottom:8px; }
+    p, li { font-size:14px; color:#3d3d42; line-height:1.5; }
+    ul, ol { padding-left:18px; }
+    li { margin:4px 0; }
+    .when { font-size:12px; color:var(--blue); font-weight:650; letter-spacing:.04em; }
+    table { width:100%; border-collapse:collapse; font-size:13.5px; margin-top:8px; }
+    th, td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { font-size:11px; text-transform:uppercase; color:var(--muted); }
+    .warn { background:#fff7ed; border-radius:10px; padding:10px 12px; font-size:13.5px; color:#7c2d12; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html">← Hub</a>
+    <h1>Development timeline</h1>
+    <p>2–4 months to a stable MVP. Team: 2 Flutter, 1 PHP. Watch hardware is after the app.</p>
+  </header>
+  <main>
+    <section>
+      <h2>Reality</h2>
+      <p>Four months can ship <b>chat + pay + assigned doctor + basic shop</b>. It cannot ship a medical cuff watch, HMO cover, or a finished desktop suite. Those are after MVP.</p>
+      <p style="margin-top:8px">Build vertical slices you can tap on a phone. Do not spend month 1 on backend-only.</p>
+    </section>
+
+    <section>
+      <p class="when">WEEKS 1–2 · MONTH 0</p>
+      <h2>Rails</h2>
+      <ul>
+        <li>Flutter shell (iOS / Android first).</li>
+        <li>VPS: Nginx, PHP API, MySQL, SMTP.</li>
+        <li>Figma: home = chat, shop, consult thread.</li>
+        <li>AI policy locked: no diagnosis, no prescription.</li>
+        <li>Guest session with no account.</li>
+        <li>Payments in test mode.</li>
+      </ul>
+      <p style="margin-top:8px"><b>Exit:</b> guest opens the app and sees “How are you feeling today?”</p>
+    </section>
+
+    <section>
+      <p class="when">WEEKS 3–6 · MONTH 1</p>
+      <h2>The habit</h2>
+      <ul>
+        <li>Guest chat + Voltar can explain the app.</li>
+        <li>Intake a doctor can read.</li>
+        <li>Emergency banner on danger phrases.</li>
+        <li>ElevenLabs one automated check-in call (same rules as text).</li>
+        <li>Optional Google / Apple / email in the corner.</li>
+      </ul>
+      <p style="margin-top:8px"><b>Do not build:</b> doctor grid, watch sync, video.</p>
+      <p><b>Exit:</b> a stranger has a real conversation without signing up.</p>
+    </section>
+
+    <section>
+      <p class="when">WEEKS 7–10 · MONTH 2</p>
+      <h2>Money + a human</h2>
+      <ul>
+        <li>Quick Consult: price first → pay → assign one clinician.</li>
+        <li>Timed chat session.</li>
+        <li>After Rx pay or “save history” → 10-second signup.</li>
+        <li>Ugly doctor console: intake, reply, write Rx.</li>
+        <li>Ratings when the session ends.</li>
+      </ul>
+      <p style="margin-top:8px"><b>Exit:</b> guest pays, talks to a person, can rate.</p>
+    </section>
+
+    <section>
+      <p class="when">WEEKS 11–14 · MONTH 3</p>
+      <h2>Pharmacy + voice</h2>
+      <ul>
+        <li>Shop search. No stock counts. Ask availability.</li>
+        <li>OTC guest checkout, then prompt an account.</li>
+        <li>Rx-only locked until a Voltar doctor prescribed it.</li>
+        <li>Upload paper Rx → extract → human confirm → availability.</li>
+        <li>Voice (video only if the same SDK is cheap).</li>
+        <li>Recording consent. Files on R2 + VPS copy.</li>
+        <li>History: upcoming / past / cancel.</li>
+      </ul>
+      <p style="margin-top:8px"><b>Exit:</b> consult kit becomes a sourced drug or nearby pickup.</p>
+    </section>
+
+    <section>
+      <p class="when">WEEKS 15–16 · MONTH 4</p>
+      <h2>Harden</h2>
+      <ul>
+        <li>Thin Flutter web/desktop for video + chat.</li>
+        <li>Settings: allergies, meds, conditions.</li>
+        <li>Med reminders in the app (watch later).</li>
+        <li>Crash, pay, privacy, AI refusal audit.</li>
+        <li>Closed beta with 2–3 clinicians.</li>
+      </ul>
+      <p style="margin-top:8px"><b>MVP exit:</b> guest chat → paid consult → Rx → availability → pay → account. AI never plays doctor.</p>
+    </section>
+
+    <section>
+      <h2>After month 4</h2>
+      <ul>
+        <li>Voltar X Series 1 (pump + cuff).</li>
+        <li>Daily BP + clinician flags.</li>
+        <li>Physical booking.</li>
+        <li>HMO pilots.</li>
+        <li>Reputation visible only after you used that doctor.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Who does what</h2>
+      <table>
+        <tr><th>Slice</th><th>Flutter</th><th>PHP</th></tr>
+        <tr><td>Chat + guest</td><td>Both</td><td>Session + AI proxy</td></tr>
+        <tr><td>Pay + assign</td><td>One</td><td>Payments, matching</td></tr>
+        <tr><td>Doctor console</td><td>One</td><td>Rx, notes</td></tr>
+        <tr><td>Shop</td><td>One</td><td>Vendors / availability</td></tr>
+        <tr><td>Voice / video</td><td>Shared</td><td>Rooms, recordings</td></tr>
+      </table>
+      <p class="warn" style="margin-top:12px">If a week slips, cut video and desktop first. Do not cut payments or AI guardrails.</p>
+    </section>
+
+    <section>
+      <h2>Pick a calendar</h2>
+      <ul>
+        <li><b>Tight · 8 weeks:</b> chat + pay + chat-consult + ugly Rx. Shop is request-only.</li>
+        <li><b>Plan · 16 weeks:</b> months 1–4 above.</li>
+        <li><b>Lie:</b> watch + HMO + multi-clinic ops in the same window.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
